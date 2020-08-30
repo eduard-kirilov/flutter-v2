@@ -1,2 +1,2 @@
-# flutter-v2
-Learning Flutter
+# flutter-start
+Test project for self-learning the Flutter framework
