@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter1/domain/workout.dart';
+import 'package:flutter1/services/auth.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -7,8 +9,21 @@ class HomePage extends StatelessWidget {
     return Container(
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        appBar:
-            AppBar(title: Text('MaxFit'), leading: Icon(Icons.fitness_center)),
+        appBar: AppBar(
+            title: Text('MaxFit'),
+            leading: Icon(Icons.fitness_center),
+            actions: <Widget>[
+              FlatButton.icon(
+                onPressed: () {
+                  context.read<AuthServise>().signOut();
+                },
+                icon: Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                ),
+                label: SizedBox.shrink(),
+              )
+            ]),
         body: WorkoutsList(),
       ),
     );

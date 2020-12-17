@@ -1,4 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter1/domain/userFit.dart';
+import 'package:flutter1/services/auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 class AuthorizationPage extends StatefulWidget {
   @override
@@ -33,12 +38,54 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
       );
     }
 
-    void _handleSubmit() {
+    void _handleSignInSubmit() {
       _email = _emailController.text;
       _password = _passwordController.text;
 
-      _emailController.clear();
-      _passwordController.clear();
+      if (_email.isEmpty || _password.isEmpty) return;
+
+      context.read<AuthServise>().signIn(_email.trim(), _password.trim());
+      UserFit user = context.watch<UserFit>();
+
+      if (user == null) {
+        Fluttertoast.showToast(
+            msg: "Can't SignIn your please check your email/password",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        _emailController.clear();
+        _passwordController.clear();
+      } else {
+        _emailController.clear();
+        _passwordController.clear();
+      }
+    }
+
+    void _handleSignUpSubmit() async {
+      _email = _emailController.text;
+      _password = _passwordController.text;
+
+      context.read<AuthServise>().signUp(_email.trim(), _password.trim());
+      UserFit user = context.watch<UserFit>();
+
+      if (user == null) {
+        Fluttertoast.showToast(
+            msg: "Can't SignIn your please check your email/password",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        _emailController.clear();
+        _passwordController.clear();
+      } else {
+        _emailController.clear();
+        _passwordController.clear();
+      }
     }
 
     Widget _input(Icon icon, String hint, TextEditingController controller,
@@ -119,7 +166,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
             _logo(),
             (showLogin
                 ? Column(children: <Widget>[
-                    _form('LOGIN', _handleSubmit),
+                    _form('LOGIN', _handleSignInSubmit),
                     Padding(
                       padding: EdgeInsets.all(10),
                       child: GestureDetector(
@@ -134,7 +181,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                     )
                   ])
                 : Column(children: <Widget>[
-                    _form('REGISTER', _handleSubmit),
+                    _form('REGISTER', _handleSignUpSubmit),
                     Padding(
                       padding: EdgeInsets.all(10),
                       child: GestureDetector(
